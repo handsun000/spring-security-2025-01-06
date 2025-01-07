@@ -30,7 +30,7 @@ public class ApiV1PostController {
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int pageSize
     ) {
-        Member actor = rq.checkAuthentication();
+        Member actor = rq.getActor();
 
         return new PageDto<>(
                 postService.findByAuthorPaged(actor, searchKeywordType, searchKeyword, page, pageSize)
@@ -58,7 +58,7 @@ public class ApiV1PostController {
         Post post = postService.findById(id).get();
 
         if (!post.isPublished()) {
-            Member actor = rq.checkAuthentication();
+            Member actor = rq.getActor();
 
             post.checkActorCanRead(actor);
         }
@@ -84,7 +84,7 @@ public class ApiV1PostController {
     public RsData<PostWithContentDto> write(
             @RequestBody @Valid PostWriteReqBody reqBody
     ) {
-        Member actor = rq.checkAuthentication();
+        Member actor = rq.getActor();
 
         Post post = postService.write(
                 actor,
@@ -120,7 +120,7 @@ public class ApiV1PostController {
             @PathVariable long id,
             @RequestBody @Valid PostModifyReqBody reqBody
     ) {
-        Member actor = rq.checkAuthentication();
+        Member actor = rq.getActor();
 
         Post post = postService.findById(id).get();
 
@@ -143,7 +143,7 @@ public class ApiV1PostController {
     public RsData<Void> delete(
             @PathVariable long id
     ) {
-        Member member = rq.checkAuthentication();
+        Member member = rq.getActor();
 
         Post post = postService.findById(id).get();
 
